@@ -17,7 +17,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> chatContents = [
+    var chatContents = <Widget>[
       if (!message.isMine)
         CircleAvatar(
           child: profile == null

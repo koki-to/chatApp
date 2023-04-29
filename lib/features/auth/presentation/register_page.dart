@@ -56,71 +56,72 @@ class _RegisterPageState extends State<RegisterPage> {
         title: const Text('登録'),
       ),
       body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: formPadding,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(
-                  label: Text('メールアドレス'),
-                ),
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return '必須';
-                  }
-                  return null;
-                },
-                keyboardType: TextInputType.emailAddress,
+        key: _formKey,
+        child: ListView(
+          padding: formPadding,
+          children: [
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                label: Text('メールアドレス'),
               ),
-              formSpacer,
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  label: Text('パスワード'),
-                ),
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return '必須';
-                  }
-                  if (val.length < 6) {
-                    return '6文字以上';
-                  }
-                  return null;
-                },
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return '必須';
+                }
+                return null;
+              },
+              keyboardType: TextInputType.emailAddress,
+            ),
+            formSpacer,
+            TextFormField(
+              controller: _passwordController,
+              obscureText: true,
+              decoration: const InputDecoration(
+                label: Text('パスワード'),
               ),
-              formSpacer,
-              TextFormField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  label: Text('ユーザー名'),
-                ),
-                validator: (val) {
-                  if (val == null || val.isEmpty) {
-                    return '必須';
-                  }
-                  final isValid = RegExp(r'^[A-Za-z0-9_]{3,24}$').hasMatch(val);
-                  if (!isValid) {
-                    return '3~24文字のアルファベットか文字で入力してください';
-                  }
-                  return null;
-                },
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return '必須';
+                }
+                if (val.length < 6) {
+                  return '6文字以上';
+                }
+                return null;
+              },
+            ),
+            formSpacer,
+            TextFormField(
+              controller: _usernameController,
+              decoration: const InputDecoration(
+                label: Text('ユーザー名'),
               ),
-              formSpacer,
-              ElevatedButton(
-                onPressed: _isLoading ? null : _signUp,
-                child: const Text('登録'),
-              ),
-              formSpacer,
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(LoginPage.route());
-                },
-                child: const Text('すでにアカウントをお持ちの方はこちら'),
-              )
-            ],
-          )),
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return '必須';
+                }
+                final isValid = RegExp(r'^[A-Za-z0-9_]{3,24}$').hasMatch(val);
+                if (!isValid) {
+                  return '3~24文字のアルファベットか文字で入力してください';
+                }
+                return null;
+              },
+            ),
+            formSpacer,
+            ElevatedButton(
+              onPressed: _isLoading ? null : _signUp,
+              child: const Text('登録'),
+            ),
+            formSpacer,
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).push(LoginPage.route());
+              },
+              child: const Text('すでにアカウントをお持ちの方はこちら'),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

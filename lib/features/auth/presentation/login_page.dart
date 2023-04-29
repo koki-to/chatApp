@@ -1,8 +1,6 @@
 import 'package:chat_app/configs/constants.dart';
 import 'package:chat_app/features/chat/presentation/chat_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {

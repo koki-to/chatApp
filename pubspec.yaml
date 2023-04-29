@@ -9,17 +9,17 @@ environment:
   sdk: ">=2.19.3 <3.0.0"
 
 dependencies:
+  cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-
-  cupertino_icons: ^1.0.2
   supabase_flutter: ^1.7.0
+  timeago: ^3.1.0
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  flutter_launcher_icons: ^0.13.1
   pedantic_mono: ^1.21.1
 
 flutter:

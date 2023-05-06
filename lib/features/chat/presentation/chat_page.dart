@@ -71,7 +71,7 @@ class _ChatPageState extends State<ChatPage> {
         .select<Map<String, dynamic>>()
         .eq('id', profileId)
         .single();
-    final profile = Profile.fromMap(data);
+    final profile = Profile.fromJson(data);
     setState(() {
       _profileCache[profileId] = profile;
     });

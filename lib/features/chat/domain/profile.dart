@@ -1,16 +1,18 @@
-class Profile {
-  Profile(
-    this.id,
-    this.username,
-    this.createdAt,
-  );
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../configs/date_time_converter.dart';
+part 'profile.freezed.dart';
+part 'profile.g.dart';
 
-  Profile.fromMap(Map<String, dynamic> map)
-      : id = map['id'] as String,
-        username = map['username'] as String,
-        createdAt = DateTime.parse(map['created_at'] as String);
+@freezed
+class Profile with _$Profile {
+  const factory Profile({
+    @JsonKey(name: 'id') required String id,
+    @JsonKey(name: 'username') required String username,
+    @JsonKey(name: 'created_at')
+    @DateTimeConverter()
+        required DateTime createdAt,
+  }) = _Profile;
 
-  final String id;
-  final String username;
-  final DateTime createdAt;
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
 }

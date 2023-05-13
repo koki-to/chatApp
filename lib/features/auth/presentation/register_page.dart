@@ -1,22 +1,20 @@
 import 'package:chat_app/configs/constants.dart';
+import 'package:chat_app/features/auth/application/auth_service.dart';
 import 'package:chat_app/features/chat/presentation/chat_page.dart';
+import 'package:chat_app/features/load/application/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'login_page.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class RegisterPage extends ConsumerWidget {
+  RegisterPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute(builder: (context) => const RegisterPage());
+    return MaterialPageRoute(builder: (context) => RegisterPage());
   }
 
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
   final bool _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -25,32 +23,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
 
-  Future<void> _signUp() async {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    final email = _emailController.text;
-    final password = _passwordController.text;
-    final username = _usernameController.text;
-
-    try {
-      await supabase.auth.signUp(
-        email: email,
-        password: password,
-        data: {'username': username},
-      );
-      Navigator.of(context)
-          .pushAndRemoveUntil(ChatPage.route(), (route) => false);
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (error) {
-      context.showErrorSnackBar(message: unexpectedErrorMessage);
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('登録'),
@@ -109,7 +83,25 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             formSpacer,
             ElevatedButton(
-              onPressed: _isLoading ? null : _signUp,
+              onPressed: () async {
+                try {
+                  await ref.read(authServiceProvider).signUp(
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                        username: _usernameController.text,
+                      );
+                  Navigator.of(context)
+                      .pushAndRemoveUntil(ChatPage.route(), (route) => false);
+                } on AuthException catch (error) {
+                  ref
+                      .read(scaffoldMessengerServiceProvider)
+                      .showSnackBar(error.message);
+                } catch (e) {
+                  ref
+                      .read(scaffoldMessengerServiceProvider)
+                      .showSnackBar(unexpectedErrorMessage);
+                }
+              },
               child: const Text('登録'),
             ),
             formSpacer,

@@ -1,58 +1,24 @@
 import 'package:chat_app/configs/constants.dart';
+import 'package:chat_app/features/auth/application/auth_service.dart';
 import 'package:chat_app/features/chat/presentation/chat_page.dart';
+import 'package:chat_app/features/load/application/snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class LoginPage extends ConsumerWidget {
+  LoginPage({super.key});
 
   static Route<void> route() {
-    return MaterialPageRoute(builder: (context) => const LoginPage());
+    return MaterialPageRoute(builder: (context) => LoginPage());
   }
 
-  @override
-  LoginPageState createState() => LoginPageState();
-}
-
-class LoginPageState extends State<LoginPage> {
-  bool _isLoading = false;
+  // bool _isLoading = false;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await supabase.auth.signInWithPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      await Navigator.of(context)
-          .pushAndRemoveUntil(ChatPage.route(), (route) => false);
-    } on AuthException catch (error) {
-      context.showErrorSnackBar(message: error.message);
-    } catch (_) {
-      context.showErrorSnackBar(message: unexpectedErrorMessage);
-    }
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
   @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('ログイン')),
       body: ListView(
@@ -71,7 +37,24 @@ class LoginPageState extends State<LoginPage> {
           ),
           formSpacer,
           ElevatedButton(
-            onPressed: _isLoading ? null : _signIn,
+            onPressed: () async {
+              try {
+                await ref.watch(authServiceProvider).signIn(
+                      email: _emailController.text,
+                      password: _passwordController.text,
+                    );
+                await Navigator.of(context)
+                    .pushAndRemoveUntil(ChatPage.route(), (route) => false);
+              } on AuthException catch (e) {
+                ref
+                    .watch(scaffoldMessengerServiceProvider)
+                    .showSnackBar('ログインに失敗しました。入力値をご確認ください。');
+              } catch (e) {
+                ref
+                    .read(scaffoldMessengerServiceProvider)
+                    .showSnackBar(unexpectedErrorMessage);
+              }
+            },
             child: const Text('ログイン'),
           ),
         ],

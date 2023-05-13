@@ -1,5 +1,7 @@
 import 'package:chat_app/features/auth/presentation/splash_page.dart';
+import 'package:chat_app/features/load/application/snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -12,15 +14,16 @@ void main() async {
         'IyMjExOTMsImV4cCI6MTk5Nzc5NzE5M30.ERanNS-9C74Et'
         'ybI84vYIUOcYwUBrUB4VxYng3zQikM',
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      scaffoldMessengerKey: ref.watch(scaffoldMessengerKeyProvider),
       title: 'チャットアプリ',
       theme: ThemeData.light().copyWith(
         primaryColorDark: Colors.orange,

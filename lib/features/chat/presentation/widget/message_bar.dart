@@ -18,7 +18,7 @@ class _MessageBarState extends State<MessageBar> {
     super.dispose();
   }
 
-  void _submitMessage() async {
+  Future<void> _submitMessage() async {
     final text = _textController.text;
     final myUserId = supabase.auth.currentUser!.id;
     if (text.isEmpty) {
@@ -33,7 +33,6 @@ class _MessageBarState extends State<MessageBar> {
       // エラーが発生した場合はエラーメッセージを表示
       context.showErrorSnackBar(message: error.message);
     } catch (_) {
-      // 予期せぬエラーが起きた際は予期せぬエラー用のメッセージを表示
       context.showErrorSnackBar(message: unexpectedErrorMessage);
     }
   }
@@ -44,7 +43,7 @@ class _MessageBarState extends State<MessageBar> {
       color: Colors.grey[200],
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Row(
             children: [
               Expanded(
@@ -62,7 +61,7 @@ class _MessageBarState extends State<MessageBar> {
                 ),
               ),
               TextButton(
-                onPressed: () => _submitMessage(),
+                onPressed: _submitMessage,
                 child: const Text('送信'),
               ),
             ],

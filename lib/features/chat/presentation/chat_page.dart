@@ -71,7 +71,7 @@ class _ChatPageState extends State<ChatPage> {
         .select<Map<String, dynamic>>()
         .eq('id', profileId)
         .single();
-    final profile = Profile.fromMap(data);
+    final profile = Profile.fromJson(data);
     setState(() {
       _profileCache[profileId] = profile;
     });
@@ -89,9 +89,9 @@ class _ChatPageState extends State<ChatPage> {
               Navigator.of(context)
                   .pushAndRemoveUntil(RegisterPage.route(), (route) => false);
             },
-            child: Text(
+            child: const Text(
               'ログアウト',
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+              style: TextStyle(color: Colors.black),
             ),
           )
         ],
